@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import './styles.css'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { deleteUser, getContext, udateUser } from '../../api/user';
 
 export default function Profile() {
   const [id, setId] = useState('');
@@ -14,8 +15,7 @@ export default function Profile() {
 
   async function carregarPerfil() {
     try {
-      const response = { id: 1, nome: 'teste', email: 'batata'}
-    
+      const response = await getContext()
       if(response.id) {
         setId(response.id)
         setNome(response.nome)
@@ -29,8 +29,8 @@ export default function Profile() {
   const handleSaveUpdate = async () => {
     try {
       // deverá alterar o usuário
-  
-      if(true){
+      const response = await udateUser(id, {nome: updNome, email: updEmail});
+      if(response.id){
         // se der certo redireciona
         setNome(updNome)
         setEmail(updEmail)
@@ -53,8 +53,10 @@ export default function Profile() {
 
       if(response === email) {      
         // Devera deletar usuario
-        if(true){
+        const response = await deleteUser(id)
+        if(response){
           // se der certo redireciona
+          toast("Usuário destruido")
           navigate('/')
         }
       } else {
@@ -66,13 +68,16 @@ export default function Profile() {
   }
 
   useEffect(() => {
+    // Carregar dados do usuário ao abrir a página
     async function getConteudo() {
         carregarPerfil()
     }
+    // Executar o carregamento ao abrir a página
     getConteudo()
   }, [])
 
   return (
+    // Layout do componente Profile com os dados do usuário e botões de ação.
     <div className='profile'>
       <div className='info'>
         <h1>Dados do seu perfil</h1>

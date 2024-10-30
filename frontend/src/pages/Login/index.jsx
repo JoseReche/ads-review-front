@@ -2,6 +2,7 @@ import { useState } from 'react';
 import './styles.css'
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { loginUser } from '../../api/user';
 
 export default function Login() {
   const navigate = useNavigate();
@@ -26,11 +27,17 @@ export default function Login() {
 
     try {
         // Devera fazer a requisição de login
-        if (true) {
+        const response = await loginUser(email, senha)
+        if (response.token) {
             // se der certo saltva o token no storage e redirecionar
+            localStorage.setItem('token', response.token)
+            toast('Login realizado com sucesso!');     
             return navigate('/');
         }
     } catch (error) {
+        if (error.response.status === 400) {
+          return toast("Usuario ou senha incorretos.");
+        }
         if (error.response.status === 403) {
           return toast("Sem permissão.");
         }
@@ -55,9 +62,7 @@ export default function Login() {
         </div>
         <p>Não possui conta? <spam className="signup" onClick={handleCreateAccount}>Cadastre-se</spam></p>
         <button className="button" type="submit" onClick={handleSubmit}>Entrar</button>
-        <button className="button back-button" onClick={handleBackClick}>
-          Voltar
-        </button>
+        <button className="button back-button" onClick={handleBackClick}>Voltar</button>
       </form>
     </div>
   );

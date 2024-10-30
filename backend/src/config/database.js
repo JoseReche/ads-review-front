@@ -4,10 +4,10 @@ class Database {
   constructor() {
     this.init();
   }
-
+  //Configura a config do banco
   init() {
     this.db = new Sequelize({
-      database: "exemplo",
+      database: "revisao",
       host: "localhost",
       username: "root",
       dialect: "mysql",

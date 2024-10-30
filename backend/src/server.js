@@ -1,5 +1,5 @@
 const express = require("express");
-const cors = require("cors");
+const cors = require("cors"); 
 const database = require("./config/database");
 
 const UserApi = require("./api/user");
@@ -10,7 +10,7 @@ const authMiddleware = require("./middleware/authMiddleware");
 const app = express();
 app.use(express.json());
 
-app.use(cors());
+app.use(cors()); // permite requisições de uma porta para outra 
 
 app.get("/", (req, res) => {
   res.status(200).json({ message: "OK" });
