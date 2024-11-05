@@ -1,5 +1,8 @@
+import { AuthContext } from '../../auth/Context';
+import { useContext } from 'react';
 import './styles.css'
 
 export default function LogoutButton() {
-  return <button onClick={() => { console.log("Deslogando")}}>Logout</button>;
+  const {logout} = useContext(AuthContext)
+  return <button onClick={logout}>Logout</button>;
 }

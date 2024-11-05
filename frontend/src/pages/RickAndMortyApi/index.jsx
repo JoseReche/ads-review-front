@@ -4,6 +4,8 @@ import Card from '../../components/Card'
 import Pagination from '../../components/Pagination'
 import AddButton from '../../components/AddButton'
 import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../../auth/Context'
+import { useContext } from 'react';
 
 const DATA = {
   info: {},
@@ -156,6 +158,7 @@ const DATA = {
 }
 
 export default function RickAndMortyApi() {
+  const {role}= useContext(AuthContext)
   const [ conteudo, setConteudo ] = useState(<></>)
   const [ page, setPage ] = useState(1);
   const [ totalPages, setTotalPages ] = useState(1);
@@ -179,8 +182,11 @@ export default function RickAndMortyApi() {
       return <Card
         key={personagem.id}
         data={personagem}
+        editable = { role === 'admin'}
         onClick={
-          () => navigate('/character', { state: { isUpdate: true, personagem } })
+          role === 'admin'
+          ?() => navigate('/character', { state: { isUpdate: true, personagem } })
+          :() =>{}
         }
       />
     })
@@ -199,7 +205,7 @@ export default function RickAndMortyApi() {
           { conteudo }
       </div>
       {/* Se for admin mostra o add */}
-      <AddButton onClick={handleAddClick} />
+      {role === 'admin' ? <AddButton onClick={handleAddClick} /> : null}
       <Pagination 
         page={page}
         totalPages={totalPages}
